@@ -2,38 +2,160 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>민성훈의  홈페이지</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영어 단어장 홈페이지</title>
+
     <style>
         body {
             font-family: sans-serif;
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            line-height: 1.6;
+            background: #f8fafc;
+            margin: 0;
+            padding: 0;
+            color: #1f2937;
         }
-        h1 { color: #eb2525; }
+
+        header {
+            background: #2563eb;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 40px;
+        }
+
+        header p {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+
+        .search-box {
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .search-box input {
+            width: 80%;
+            max-width: 500px;
+            padding: 15px;
+            border: 2px solid #2563eb;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
         .card {
-            background: #f3f4f6;
+            background: white;
             padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .word {
+            font-size: 28px;
+            color: #2563eb;
+            margin-bottom: 10px;
+        }
+
+        .meaning {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .example {
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 15px;
+            border: none;
+            background: #2563eb;
+            color: white;
             border-radius: 8px;
-            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #6b7280;
         }
     </style>
 </head>
+
 <body>
-    <h1>안녕하세요,코딩코딩코딩 민성훈입니다 👋</h1>
-    <p>저는 웹개발을 배우고 있는 학생입니다.</p>
-    <div class="card">
-        <h2>관심사</h2>
-        <ul>
-            <li>웹 프론트엔드</li>
-            <li>게임 개발</li>
-            <li>축구</li>
-        </ul>
+
+    <header>
+        <h1>📘 영어 단어장 홈페이지</h1>
+        <p>쉽고 재미있게 영어 단어를 암기해보세요!</p>
+    </header>
+
+    <div class="container">
+
+        <div class="search-box">
+            <input type="text" placeholder="영어 단어 검색하기...">
+        </div>
+
+        <div class="card-grid">
+
+            <div class="card">
+                <div class="word">Apple</div>
+                <div class="meaning">사과</div>
+                <div class="example">
+                    "I eat an apple every morning."
+                </div>
+                <button>🔊 발음 듣기</button>
+            </div>
+
+            <div class="card">
+                <div class="word">Beautiful</div>
+                <div class="meaning">아름다운</div>
+                <div class="example">
+                    "The sky is beautiful today."
+                </div>
+                <button>🔊 발음 듣기</button>
+            </div>
+
+            <div class="card">
+                <div class="word">Challenge</div>
+                <div class="meaning">도전</div>
+                <div class="example">
+                    "Learning English is a fun challenge."
+                </div>
+                <button>🔊 발음 듣기</button>
+            </div>
+
+        </div>
+
     </div>
-    <div class="card">
-        <h2>연락처</h2>
-        <p>이메일:abo11240720@gmail.com</p>
-    </div>
+
+    <footer>
+        © 2026 영어 단어장 사이트 | 제작 by 민성훈
+    </footer>
+
 </body>
 </html>
