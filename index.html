@@ -8,7 +8,6 @@
 </head>
 <body>
 
-    <!-- 패널티 잠금 화면 -->
     <div id="penalty-overlay" class="overlay">
         <div class="penalty-box">
             <h2>⏳ 패널티 잠금 활성화!</h2>
@@ -19,18 +18,19 @@
     </div>
 
     <div class="container">
-        <!-- 상단 탭 메뉴 -->
         <div class="tab-menu">
-            <button class="tab-btn active" onclick="openTab('search-tab')">🔍 단어 검색</button>
-            <button class="tab-btn" onclick="openTab('recommend-tab')">👾 오늘의 추천</button>
-            <button class="tab-btn" onclick="openTab('test-tab')">📝 시험 보기</button>
+            <button class="tab-btn active" onclick="openTab(event, 'search-tab')">🔍 단어 검색</button>
+            <button class="tab-btn" onclick="openTab(event, 'recommend-tab')">👾 오늘의 추천</button>
+            <button class="tab-btn" onclick="openTab(event, 'test-tab')">📝 시험 보기</button>
         </div>
 
-        <!-- [창 1] 단어 검색 -->
         <div id="search-tab" class="tab-content active">
-            <h2>🔍 단어 검색</h2>
+            <h2>🔍 무한 단어 검색 (뜻별 발음 지원)</h2>
             <div class="search-box">
-                <input type="text" id="search-input" placeholder="검색할 영단어를 입력하세요...">
+                <div class="search-input-wrapper">
+                    <input type="text" id="search-input" placeholder="아무 영단어나 입력하세요 (예: fine, lead)..." autocomplete="off">
+                    <div id="search-suggestions" class="suggestions-box"></div>
+                </div>
                 <button id="btn-search" class="btn btn-primary">검색</button>
             </div>
             <div id="search-result" class="result-box">
@@ -38,7 +38,6 @@
             </div>
         </div>
 
-        <!-- [창 2] 오늘의 추천 (정사각형 그리드 + 개별 선택 기능 추가) -->
         <div id="recommend-tab" class="tab-content">
             <div class="character-box">
                 <div id="char-container"></div>
@@ -55,10 +54,7 @@
                     </select>
                 </div>
                 
-                <!-- 2열 정사각형 격자 레이아웃으로 변경되는 구역 -->
-                <div class="recommend-list-container" id="recommend-word-list">
-                    <!-- JS에서 동적으로 정사각형 카드가 생성됨 -->
-                </div>
+                <div class="recommend-list-container" id="recommend-word-list"></div>
 
                 <div class="btn-group">
                     <button id="btn-refresh" class="btn btn-primary">🔄 다른 단어 추천 (8개)</button>
@@ -67,11 +63,9 @@
             </div>
         </div>
 
-        <!-- [창 3] 시험 보기 -->
         <div id="test-tab" class="tab-content">
             <h2>📝 실전 영단어 시험</h2>
             
-            <!-- 상태 1: 시험 시작 전 설정 화면 -->
             <div id="test-setup-zone">
                 <div class="setup-box">
                     <p>현재 저장된 단어 수: <strong id="test-total-count">0</strong>개</p>
@@ -87,20 +81,21 @@
                 <ul id="test-preview-ul"></ul>
             </div>
 
-            <!-- 상태 2: 시험 진행 화면 -->
             <div id="test-play-zone" style="display: none;">
                 <div class="test-progress-bar">
                     <span>진행도: <strong id="current-q-index">1</strong> / <span id="total-q-count">0</span></span>
                     <span>현재 정답: <strong id="current-score-count" style="color:#10b981;">0</strong></span>
                 </div>
                 <div class="test-question-box">
-                    <h1 id="test-q-eng">Word</h1>
+                    <div class="test-q-header">
+                        <h1 id="test-q-eng">Word</h1>
+                        <button id="btn-test-speaker" class="btn-speaker" title="발음 듣기">🔊</button>
+                    </div>
                     <input type="text" id="test-ans-input" placeholder="한국어 뜻을 입력하세요..." autocomplete="off">
                     <button id="btn-submit-ans" class="btn btn-primary" style="width: 100%; margin-top: 10px;">정답 제출</button>
                 </div>
             </div>
 
-            <!-- 상태 3: 결과 화면 -->
             <div id="test-result-zone" style="display: none; text-align: center;">
                 <h2 id="result-title">시험 결과</h2>
                 <div class="result-score-card">
