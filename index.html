@@ -1,357 +1,114 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>나만의 단어장</title>
-<!-- 깔끔한 한글 폰트 적용 -->
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
-
-<style>
-    body {
-        font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
-        /* 부드러운 그라데이션 배경 */
-        background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-        color: #333;
-        margin: 0;
-        padding: 0;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .container {
-        width: 100%;
-        max-width: 600px;
-        padding: 40px 20px;
-        box-sizing: border-box;
-    }
-
-    header {
-        text-align: center;
-        margin-bottom: 40px;
-    }
-
-    header h1 {
-        font-size: 28px;
-        color: #1e293b;
-        margin-bottom: 8px;
-        font-weight: 700;
-    }
-
-    header p {
-        color: #64748b;
-        font-size: 15px;
-        margin: 0;
-    }
-
-    .search-box {
-        display: flex;
-        gap: 12px;
-        margin-bottom: 30px;
-        position: relative;
-    }
-
-    .search-box input {
-        flex: 1;
-        padding: 16px 20px;
-        font-size: 16px;
-        border: 1px solid #cbd5e1;
-        border-radius: 12px;
-        outline: none;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        transition: all 0.2s ease;
-        font-family: inherit;
-    }
-
-    .search-box input:focus {
-        border-color: #3b82f6;
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-    }
-
-    .search-box button {
-        padding: 0 24px;
-        font-size: 16px;
-        font-weight: 600;
-        border: none;
-        background: #3b82f6;
-        color: white;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: background 0.2s ease;
-        box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
-        font-family: inherit;
-    }
-
-    .search-box button:hover {
-        background: #2563eb;
-    }
-
-    .card {
-        background: white;
-        padding: 30px;
-        border-radius: 16px;
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-        border: 1px solid #f1f5f9;
-        animation: fadeIn 0.4s ease-out;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .word {
-        font-size: 36px;
-        color: #0f172a;
-        font-weight: 800;
-        margin-bottom: 4px;
-        letter-spacing: -0.5px;
-    }
-
-    .phonetic {
-        color: #64748b;
-        font-size: 16px;
-        margin-bottom: 24px;
-        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', sans-serif;
-    }
-
-    .meaning {
-        font-size: 20px;
-        margin-bottom: 24px;
-        font-weight: 600;
-        color: #1e293b;
-        line-height: 1.4;
-    }
-
-    .sound-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 16px;
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        color: #475569;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 14px;
-        cursor: pointer;
-        transition: all 0.2s;
-        font-family: inherit;
-    }
-
-    .sound-btn:hover {
-        background: #f1f5f9;
-        color: #0f172a;
-    }
-
-    .example-box {
-        background: #f8fafc;
-        padding: 20px;
-        border-radius: 12px;
-        margin-top: 24px;
-        border-left: 4px solid #3b82f6;
-    }
-
-    .example-box strong {
-        color: #3b82f6;
-        font-size: 14px;
-        display: block;
-        margin-bottom: 12px;
-    }
-
-    .example-text {
-        font-size: 16px;
-        line-height: 1.6;
-        color: #334155;
-        font-style: italic;
-    }
-
-    .translate-text {
-        color: #475569;
-        margin-top: 12px;
-        font-size: 15px;
-        line-height: 1.5;
-        padding-top: 12px;
-        border-top: 1px dashed #cbd5e1;
-    }
-
-    .loading, .error-msg {
-        text-align: center;
-        padding: 40px 0;
-        color: #64748b;
-        font-size: 16px;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영단어 마스터 통합 앱</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<div class="container">
-    <header>
-        <h1>Smart Vocabulary</h1>
-        <p>궁금한 영어 단어를 검색해보세요</p>
-    </header>
-
-    <div class="search-box">
-        <input 
-            type="text" 
-            id="searchInput" 
-            placeholder="단어 입력 (예: serendipity)"
-            onkeypress="if(event.key === 'Enter') searchWord()"
-        >
-        <button onclick="searchWord()">검색</button>
+    <div id="penalty-overlay" class="overlay">
+        <div class="penalty-box">
+            <h2>⏳ 패널티 잠금 활성화!</h2>
+            <p>목표 점수를 달성하지 못했습니다. 집중하세요!</p>
+            <div id="penalty-clock">05:00</div>
+            <p class="penalty-hint">새로고침(F5)을 해도 해제되지 않습니다. 공부할 시간입니다! 🔥</p>
+        </div>
     </div>
 
-    <div id="result"></div>
-</div>
+    <div class="container">
+        <div class="tab-menu">
+            <button class="tab-btn active" onclick="openTab(event, 'search-tab')">🔍 단어 검색</button>
+            <button class="tab-btn" onclick="openTab(event, 'recommend-tab')">👾 오늘의 추천</button>
+            <button class="tab-btn" onclick="openTab(event, 'test-tab')">📝 시험 보기</button>
+        </div>
 
-<script>
-async function searchWord() {
-    const searchInput = document.getElementById("searchInput");
-    const word = searchInput.value.trim().toLowerCase();
-    const result = document.getElementById("result");
-
-    if (word === "") {
-        result.innerHTML = `
-            <div class="card error-msg">
-                검색할 단어를 입력해주세요.
-            </div>
-        `;
-        return;
-    }
-
-    result.innerHTML = `<div class="loading">단어 정보를 가져오는 중입니다... 🔍</div>`;
-
-    try {
-        // 1. 사전 API 호출
-        const response = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + word);
-        const data = await response.json();
-
-        if (data.title === "No Definitions Found") {
-            result.innerHTML = `
-                <div class="card error-msg">
-                    <strong>'${word}'</strong> 단어를 사전에서 찾을 수 없습니다.<br>
-                    스펠링을 다시 확인해주세요.
+        <div id="search-tab" class="tab-content active">
+            <h2>🔍 무한 단어 검색 (뜻별 발음 지원)</h2>
+            <div class="search-box">
+                <div class="search-input-wrapper">
+                    <input type="text" id="search-input" placeholder="아무 영단어나 입력하세요 (예: fine, lead)..." autocomplete="off">
+                    <div id="search-suggestions" class="suggestions-box"></div>
                 </div>
-            `;
-            return;
-        }
+                <button id="btn-search" class="btn btn-primary">검색</button>
+            </div>
+            <div id="search-result" class="result-box">
+                <p class="info-text">검색 결과가 여기에 표시됩니다.</p>
+            </div>
+        </div>
 
-        const item = data[0];
+        <div id="recommend-tab" class="tab-content">
+            <div class="character-box">
+                <div id="char-container"></div>
+                <div class="bubble" id="bubble-text">오늘의 추천 단어 8개를 준비했어!</div>
+            </div>
 
-        // 2. 발음 기호 찾기 (배열 안쪽에 숨어있는 경우까지 탐색)
-        let phonetic = item.phonetic;
-        if (!phonetic && item.phonetics && item.phonetics.length > 0) {
-            const foundPhonetic = item.phonetics.find(p => p.text);
-            if (foundPhonetic) phonetic = foundPhonetic.text;
-        }
-        phonetic = phonetic || ""; // 발음 기호가 아예 없으면 빈 문자열
-
-        // 3. 원어민 오디오 파일 찾기
-        let audioUrl = "";
-        if (item.phonetics && item.phonetics.length > 0) {
-            const foundAudio = item.phonetics.find(p => p.audio && p.audio.length > 0);
-            if (foundAudio) audioUrl = foundAudio.audio;
-        }
-
-        // 4. 영어 뜻 찾기
-        const englishMeaning = item.meanings?.[0]?.definitions?.[0]?.definition || "제공된 뜻이 없습니다.";
-
-        // 5. 영어 예문 찾기
-        let example = item.meanings?.[0]?.definitions?.[0]?.example;
-        if (!example) {
-            example = `She tried to use the word "${word}" in a sentence.`;
-        }
-
-        // 6. 뜻 번역 (특수문자로 인한 에러 방지를 위해 encodeURIComponent 사용)
-        let koreanMeaning = "번역을 불러올 수 없습니다.";
-        try {
-            const encodedMeaning = encodeURIComponent(englishMeaning);
-            const meaningTranslate = await fetch(`https://api.mymemory.translated.net/get?q=${encodedMeaning}&langpair=en|ko`);
-            const meaningData = await meaningTranslate.json();
-            koreanMeaning = meaningData.responseData.translatedText;
-            
-            // MyMemory API 일일 한도 초과 시 처리
-            if(koreanMeaning.includes("MYMEMORY WARNING")) {
-                koreanMeaning = `(번역 한도 초과) ${englishMeaning}`;
-            }
-        } catch(e) {
-            koreanMeaning = englishMeaning; // 에러시 영어 그대로 출력
-        }
-
-        // 7. 예문 번역
-        let koreanExample = "예문 해석을 불러올 수 없습니다.";
-        try {
-            const encodedExample = encodeURIComponent(example);
-            const exampleTranslate = await fetch(`https://api.mymemory.translated.net/get?q=${encodedExample}&langpair=en|ko`);
-            const exampleData = await exampleTranslate.json();
-            koreanExample = exampleData.responseData.translatedText;
-            
-            if(koreanExample.includes("MYMEMORY WARNING")) {
-                koreanExample = "(번역 한도 초과)";
-            }
-        } catch(e) {
-            koreanExample = "";
-        }
-
-        // 화면 렌더링
-        result.innerHTML = `
-            <div class="card">
-                <div class="word">${item.word}</div>
-                ${phonetic ? `<div class="phonetic">${phonetic}</div>` : ''}
+            <div class="word-card">
+                <div class="category-select">
+                    <label for="type-select">유형 선택: </label>
+                    <select id="type-select">
+                        <option value="basic">기초 필수 단어</option>
+                        <option value="exam">모의고사 대비</option>
+                        <option value="daily">일상 표현</option>
+                    </select>
+                </div>
                 
-                <div class="meaning">🇰🇷 ${koreanMeaning}</div>
-                
-                <button class="sound-btn" onclick="speakWord('${item.word}', '${audioUrl}')">
-                    🔊 발음 듣기
-                </button>
+                <div class="recommend-list-container" id="recommend-word-list"></div>
 
-                <div class="example-box">
-                    <strong>📖 활용 예문</strong>
-                    <div class="example-text">"${example}"</div>
-                    <div class="translate-text">🇰🇷 ${koreanExample}</div>
+                <div class="btn-group">
+                    <button id="btn-refresh" class="btn btn-primary">🔄 다른 단어 추천 (8개)</button>
+                    <button id="btn-add-test" class="btn btn-secondary">⭐ 8개 전체 시험 추가</button>
                 </div>
             </div>
-        `;
+        </div>
 
-    } catch (error) {
-        result.innerHTML = `
-            <div class="card error-msg">
-                네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.
+        <div id="test-tab" class="tab-content">
+            <h2>📝 실전 영단어 시험</h2>
+            
+            <div id="test-setup-zone">
+                <div class="setup-box">
+                    <p>현재 저장된 단어 수: <strong id="test-total-count">0</strong>개</p>
+                    <div class="goal-input-group">
+                        <label for="input-target-goal">목표 맞출 개수:</label>
+                        <input type="number" id="input-target-goal" min="1" value="5">
+                    </div>
+                    <p class="fail-warning">⚠️ 탈락 시 패널티 대기시간이 <span id="next-penalty-min">5</span>분간 부여됩니다!</p>
+                </div>
+                <button id="btn-start-test" class="btn btn-warn" style="width:100%; margin-top:15px;">✍️ 시험 시작하기</button>
+                
+                <h3 style="margin-top: 25px; font-size: 15px; color: #475569;">📋 현재 시험 단어장</h3>
+                <ul id="test-preview-ul"></ul>
             </div>
-        `;
-        console.error(error);
-    }
-}
 
-// 오디오 재생 및 TTS 기능
-function speakWord(word, audioUrl) {
-    // 1. API에서 제공하는 원어민 녹음 파일이 있으면 그것을 우선 재생
-    if (audioUrl && audioUrl !== 'undefined' && audioUrl !== '') {
-        const audio = new Audio(audioUrl);
-        audio.play().catch(e => {
-            console.log("오디오 재생 실패, 기계음으로 대체합니다.");
-            fallbackTTS(word);
-        });
-    } else {
-        // 2. 녹음 파일이 없으면 브라우저 내장 기계음(TTS) 사용
-        fallbackTTS(word);
-    }
-}
+            <div id="test-play-zone" style="display: none;">
+                <div class="test-progress-bar">
+                    <span>진행도: <strong id="current-q-index">1</strong> / <span id="total-q-count">0</span></span>
+                    <span>현재 정답: <strong id="current-score-count" style="color:#10b981;">0</strong></span>
+                </div>
+                <div class="test-question-box">
+                    <div class="test-q-header">
+                        <h1 id="test-q-eng">Word</h1>
+                        <button id="btn-test-speaker" class="btn-speaker" title="발음 듣기">🔊</button>
+                    </div>
+                    <input type="text" id="test-ans-input" placeholder="한국어 뜻을 입력하세요..." autocomplete="off">
+                    <button id="btn-submit-ans" class="btn btn-primary" style="width: 100%; margin-top: 10px;">정답 제출</button>
+                </div>
+            </div>
 
-function fallbackTTS(word) {
-    if (!window.speechSynthesis) {
-        alert("이 브라우저에서는 음성 합성을 지원하지 않습니다.");
-        return;
-    }
-    const speech = new SpeechSynthesisUtterance(word);
-    speech.lang = "en-US";
-    speech.rate = 0.9; // 발음 속도를 살짝 늦춰서 자연스럽게
-    window.speechSynthesis.speak(speech);
-}
-</script>
+            <div id="test-result-zone" style="display: none; text-align: center;">
+                <h2 id="result-title">시험 결과</h2>
+                <div class="result-score-card">
+                    <p>내 점수: <strong id="final-score">0</strong> / <span id="final-total">0</span></p>
+                    <p>목표 점수: <strong id="final-goal">0</strong>개</p>
+                </div>
+                <p id="result-comment">과연 결과는...?</p>
+                <button id="btn-finish-test" class="btn btn-secondary" style="margin-top: 15px;">확인</button>
+            </div>
 
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
