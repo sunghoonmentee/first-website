@@ -2,19 +2,14 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>영단어 마스터</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-=======
-    <title>영단어 마스터 통합 앱</title>
->>>>>>> c161dab0c225180f72d33ca11248073976d7ed7c
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<<<<<<< HEAD
     <!-- 패널티 오버레이 -->
     <div id="penalty-overlay" class="overlay">
         <div class="penalty-box">
@@ -26,9 +21,6 @@
         </div>
     </div>
 
-    <!-- 토스트 알림 -->
-    <div id="toast" class="toast"></div>
-
     <div class="app-wrapper">
         <header class="app-header">
             <span class="app-logo">📖</span>
@@ -36,19 +28,19 @@
         </header>
 
         <div class="container">
+            <!-- 탭 메뉴 — data-tab 속성으로 JS 위임 처리 -->
             <div class="tab-menu">
-                <button class="tab-btn active" onclick="openTab(event, 'search-tab')">
+                <button class="tab-btn active" data-tab="search-tab">
                     <span class="tab-icon">🔍</span>
                     <span class="tab-label">단어 검색</span>
                 </button>
-                <button class="tab-btn" onclick="openTab(event, 'recommend-tab')">
+                <button class="tab-btn" data-tab="recommend-tab">
                     <span class="tab-icon">✨</span>
                     <span class="tab-label">오늘의 추천</span>
                 </button>
-                <button class="tab-btn" onclick="openTab(event, 'test-tab')">
+                <button class="tab-btn" data-tab="test-tab">
                     <span class="tab-icon">📝</span>
                     <span class="tab-label">시험 보기</span>
-                    <span id="test-badge" class="tab-badge" style="display:none;">0</span>
                 </button>
             </div>
 
@@ -61,8 +53,9 @@
                 <div class="search-box">
                     <div class="search-input-wrapper">
                         <span class="search-icon">🔍</span>
-                        <input type="text" id="search-input" placeholder="영단어를 입력하세요 (예: fine, lead)..." autocomplete="off" spellcheck="false">
-                        <button id="btn-clear-input" class="btn-clear-input" style="display:none;">✕</button>
+                        <input type="text" id="search-input"
+                            placeholder="영단어를 입력하세요 (예: fine, lead)..."
+                            autocomplete="off">
                         <div id="search-suggestions" class="suggestions-box"></div>
                     </div>
                     <button id="btn-search" class="btn btn-primary">검색</button>
@@ -134,14 +127,6 @@
                                 <button class="goal-adj" onclick="adjustGoal(1)">＋</button>
                             </div>
                         </div>
-                        <!-- [개선] 시험 방향 선택 추가 -->
-                        <div class="setup-row">
-                            <span class="setup-label">시험 방향</span>
-                            <div class="direction-toggle">
-                                <button class="dir-btn active" id="dir-kor" onclick="setDirection('kor')">영→한</button>
-                                <button class="dir-btn" id="dir-eng" onclick="setDirection('eng')">한→영</button>
-                            </div>
-                        </div>
                         <p class="fail-warning">⚠️ 탈락 시 패널티 <span id="next-penalty-min">5</span>분 부여</p>
                     </div>
                     <button id="btn-start-test" class="btn btn-warn btn-full">✍️ 시험 시작하기</button>
@@ -171,13 +156,12 @@
                             <h1 id="test-q-eng">Word</h1>
                             <button id="btn-test-speaker" class="btn-speaker" title="발음 듣기">🔊</button>
                         </div>
-                        <!-- [개선] 시험 방향 표시 라벨 -->
-                        <p class="test-direction-label" id="test-direction-label">한국어 뜻을 입력하세요</p>
                         <p class="test-hint" id="test-hint"></p>
-                        <input type="text" id="test-ans-input" placeholder="답을 입력하세요..." autocomplete="off" spellcheck="false">
+                        <input type="text" id="test-ans-input"
+                            placeholder="한국어 뜻을 입력하세요..."
+                            autocomplete="off">
                         <div class="test-btn-row">
                             <button id="btn-hint" class="btn btn-outline">💡 힌트</button>
-                            <button id="btn-skip" class="btn btn-outline">⏭ 건너뛰기</button>
                             <button id="btn-submit-ans" class="btn btn-primary btn-flex">정답 제출</button>
                         </div>
                         <div id="answer-feedback" class="answer-feedback" style="display:none;"></div>
@@ -188,123 +172,22 @@
                 <div id="test-result-zone" style="display: none; text-align: center;">
                     <h2 id="result-title">시험 결과</h2>
                     <div class="result-score-card">
-                        <div class="score-big"><strong id="final-score">0</strong><span> / <span id="final-total">0</span></span></div>
+                        <div class="score-big">
+                            <strong id="final-score">0</strong>
+                            <span> / <span id="final-total">0</span></span>
+                        </div>
                         <p>목표: <strong id="final-goal">0</strong>개</p>
                     </div>
                     <p id="result-comment" class="result-comment"></p>
 
-                    <!-- 오답 복기 — [개선] 오답 재시험 버튼 추가 -->
                     <div id="wrong-review" class="wrong-review" style="display:none;">
-                        <div class="wrong-review-header">
-                            <h3>🔴 오답 목록</h3>
-                            <button id="btn-retry-wrong" class="btn-retry-wrong">오답만 다시 풀기</button>
-                        </div>
+                        <h3>🔴 오답 목록</h3>
                         <ul id="wrong-list"></ul>
                     </div>
 
                     <button id="btn-finish-test" class="btn btn-secondary btn-full" style="margin-top: 15px;">확인</button>
                 </div>
             </div>
-=======
-    <div id="penalty-overlay" class="overlay">
-        <div class="penalty-box">
-            <h2>⏳ 패널티 잠금 활성화!</h2>
-            <p>목표 점수를 달성하지 못했습니다. 집중하세요!</p>
-            <div id="penalty-clock">05:00</div>
-            <p class="penalty-hint">새로고침(F5)을 해도 해제되지 않습니다. 공부할 시간입니다! 🔥</p>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="tab-menu">
-            <button class="tab-btn active" onclick="openTab(event, 'search-tab')">🔍 단어 검색</button>
-            <button class="tab-btn" onclick="openTab(event, 'recommend-tab')">👾 오늘의 추천</button>
-            <button class="tab-btn" onclick="openTab(event, 'test-tab')">📝 시험 보기</button>
-        </div>
-
-        <div id="search-tab" class="tab-content active">
-            <h2>🔍 무한 단어 검색 (뜻별 발음 지원)</h2>
-            <div class="search-box">
-                <div class="search-input-wrapper">
-                    <input type="text" id="search-input" placeholder="아무 영단어나 입력하세요 (예: fine, lead)..." autocomplete="off">
-                    <div id="search-suggestions" class="suggestions-box"></div>
-                </div>
-                <button id="btn-search" class="btn btn-primary">검색</button>
-            </div>
-            <div id="search-result" class="result-box">
-                <p class="info-text">검색 결과가 여기에 표시됩니다.</p>
-            </div>
-        </div>
-
-        <div id="recommend-tab" class="tab-content">
-            <div class="character-box">
-                <div id="char-container"></div>
-                <div class="bubble" id="bubble-text">오늘의 추천 단어 8개를 준비했어!</div>
-            </div>
-
-            <div class="word-card">
-                <div class="category-select">
-                    <label for="type-select">유형 선택: </label>
-                    <select id="type-select">
-                        <option value="basic">기초 필수 단어</option>
-                        <option value="exam">모의고사 대비</option>
-                        <option value="daily">일상 표현</option>
-                    </select>
-                </div>
-                
-                <div class="recommend-list-container" id="recommend-word-list"></div>
-
-                <div class="btn-group">
-                    <button id="btn-refresh" class="btn btn-primary">🔄 다른 단어 추천 (8개)</button>
-                    <button id="btn-add-test" class="btn btn-secondary">⭐ 8개 전체 시험 추가</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="test-tab" class="tab-content">
-            <h2>📝 실전 영단어 시험</h2>
-            
-            <div id="test-setup-zone">
-                <div class="setup-box">
-                    <p>현재 저장된 단어 수: <strong id="test-total-count">0</strong>개</p>
-                    <div class="goal-input-group">
-                        <label for="input-target-goal">목표 맞출 개수:</label>
-                        <input type="number" id="input-target-goal" min="1" value="5">
-                    </div>
-                    <p class="fail-warning">⚠️ 탈락 시 패널티 대기시간이 <span id="next-penalty-min">5</span>분간 부여됩니다!</p>
-                </div>
-                <button id="btn-start-test" class="btn btn-warn" style="width:100%; margin-top:15px;">✍️ 시험 시작하기</button>
-                
-                <h3 style="margin-top: 25px; font-size: 15px; color: #475569;">📋 현재 시험 단어장</h3>
-                <ul id="test-preview-ul"></ul>
-            </div>
-
-            <div id="test-play-zone" style="display: none;">
-                <div class="test-progress-bar">
-                    <span>진행도: <strong id="current-q-index">1</strong> / <span id="total-q-count">0</span></span>
-                    <span>현재 정답: <strong id="current-score-count" style="color:#10b981;">0</strong></span>
-                </div>
-                <div class="test-question-box">
-                    <div class="test-q-header">
-                        <h1 id="test-q-eng">Word</h1>
-                        <button id="btn-test-speaker" class="btn-speaker" title="발음 듣기">🔊</button>
-                    </div>
-                    <input type="text" id="test-ans-input" placeholder="한국어 뜻을 입력하세요..." autocomplete="off">
-                    <button id="btn-submit-ans" class="btn btn-primary" style="width: 100%; margin-top: 10px;">정답 제출</button>
-                </div>
-            </div>
-
-            <div id="test-result-zone" style="display: none; text-align: center;">
-                <h2 id="result-title">시험 결과</h2>
-                <div class="result-score-card">
-                    <p>내 점수: <strong id="final-score">0</strong> / <span id="final-total">0</span></p>
-                    <p>목표 점수: <strong id="final-goal">0</strong>개</p>
-                </div>
-                <p id="result-comment">과연 결과는...?</p>
-                <button id="btn-finish-test" class="btn btn-secondary" style="margin-top: 15px;">확인</button>
-            </div>
-
->>>>>>> c161dab0c225180f72d33ca11248073976d7ed7c
         </div>
     </div>
 
